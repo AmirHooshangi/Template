@@ -6,7 +6,7 @@
 ;; URL: https://github.com/AmirHooshangi/Template
 ;; Keywords: project, template
 ;; Version: 0.1.0
-;; Package-Requires: ((restclient "20141127.611"))
+;; Package-Requires: ((request "20140316.417"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -27,27 +27,58 @@
 
 ;;; Commentary:
 ;;
+;; This extension is for creating new project templates (e.g Scala-sbt project).
 ;; Check the README file for more information.
 ;;
 ;;; Code:
 
 
-(require 'restclient)
+(require 'request)
 
-(defun create-project(x &optional y)
-  (interactive "P\nsEnter your Giter8 Template name: ")
-  (async-shell-command (concatenate 'string "g8" " " y )))
+(defvar remote-template-list '())
+;; this variable acts as a cache, for the first times fills from the github REST API and after
+;; that it's being searched locally.
 
-
-(defun get-template-from-user()
+(defun create-project()
+  "This method is an entry point for creating your template."
   (interactive)
-  (completing-read
-   "Complete a foo: "
-   '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
-   nil t "")
+  (if (> (length remote-template-list) 0) (get-template-from-user) (fetch-list))
   )
 
+(defun fetch-list()
+  "This method fills remote-template-list from github REST api."
+    (search-github)
+  )
 
+(defun get-template-from-user(&optional y)
+  "This function helps user on autocomplete in minibuffer on remote-template-list,
+   and after that passes the user input to g8 command of emacs shell. "
+  (interactive)
+  (setq template-name  (completing-read "Please Enter Nmae Of Your Template: "
+   remote-template-list
+   nil t ""))
+   (async-shell-command (concatenate 'string "g8" " " template-name))
+  )
+
+(defun search-github()
+  "searching github's repos which contain g8 in their name. this repos are stared"
+  (request
+   "https://api.github.com/search/repositories"
+   :params '(("q" . "g8" )  ("sort" . "stars")  ("order" . "desc"))
+   :parser 'json-read
+   :success (function*
+             (lambda (&key data &allow-other-keys)
+                (fill-the-list data)
+                ;;TODO: cleaning the minibuffer
+                (message "please wait, Templates are being fetched from GitHub \n")
+                (get-template-from-user)))))
+
+(defun fill-the-list(data)
+  "helper function for search-github which searches the http response and extracts
+  their full_name, after that adds them to remote-template-list"
+  (setq items (assoc-default 'items data))
+  (dotimes (i (length items))
+    (add-to-list 'remote-template-list (assoc-default 'full_name (elt items i))  )))
 
 
 ;;; template.el ends here
