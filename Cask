@@ -4,5 +4,5 @@
 (package-file "template.el")
 
 (development
- (depends-on "restclient")
+ (depends-on "request")
  )
