@@ -53,7 +53,6 @@
 (defun get-template-from-user(&optional y)
   "This function helps user on autocomplete in minibuffer on remote-template-list,
    and after that passes the user input to g8 command of emacs shell. "
-  (interactive)
   (setq template-name  (completing-read "Please Enter Nmae Of Your Template: "
    remote-template-list
    nil t ""))
