@@ -50,7 +50,7 @@
     (search-github)
   )
 
-(defun get-template-from-user(&optional y)
+(defun get-template-from-user()
   "This function helps user on autocomplete in minibuffer on remote-template-list,
    and after that passes the user input to g8 command of emacs shell. "
   (setq template-name  (completing-read "Please Enter Nmae Of Your Template: "
@@ -79,5 +79,7 @@
   (dotimes (i (length items))
     (add-to-list 'remote-template-list (assoc-default 'full_name (elt items i))  )))
 
+
+(provide 'template)
 
 ;;; template.el ends here
