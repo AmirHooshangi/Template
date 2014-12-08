@@ -15,7 +15,11 @@ $ g8 [arguments]   => this command being used by emacs
 
 ### Installation
 
-TODO
+* This package is available on marmalade repo, so you need to add it to your repo list and after that :
+```sh
+M-x package-install [RET] template [RET]
+```
+* add this line to your .emacs => (require 'template)
 
 ### How to use
 
