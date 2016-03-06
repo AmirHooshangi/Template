@@ -42,42 +42,42 @@
 (defun create-project()
   "This method is an entry point for creating your template."
   (interactive)
-  (if (> (length remote-template-list) 0) (get-template-from-user) (fetch-list))
+  (get-template-from-user)
   )
 
-(defun fetch-list()
-  "This method fills remote-template-list from github REST api."
-    (search-github)
-  )
+;;;(defun fetch-list()
+;;;  "This method fills remote-template-list from github REST api."
+;;;    (search-github)
+;;;  )
 
 (defun get-template-from-user()
   "This function helps user on autocomplete in minibuffer on remote-template-list,
    and after that passes the user input to g8 command of emacs shell. "
-  (setq template-name  (completing-read "Please Enter Nmae Of Your Template: "
-   remote-template-list
-   nil t ""))
+  (setq template-name  (completing-read "Please Enter Nmae Of Your Template: " remote-template-list ))
    (async-shell-command (concatenate 'string "g8" " " template-name))
   )
 
-(defun search-github()
-  "searching github's repos which contain g8 in their name. this repos are stared"
-  (request
-   "https://api.github.com/search/repositories"
-   :params '(("q" . "g8" )  ("sort" . "stars")  ("order" . "desc"))
-   :parser 'json-read
-   :success (function*
-             (lambda (&key data &allow-other-keys)
-                (fill-the-list data)
-                ;;TODO: cleaning the minibuffer
-                (message "please wait, Templates are being fetched from GitHub \n")
-                (get-template-from-user)))))
+;;; (get-template-from-user)
 
-(defun fill-the-list(data)
-  "helper function for search-github which searches the http response and extracts
-  their full_name, after that adds them to remote-template-list"
-  (setq items (assoc-default 'items data))
-  (dotimes (i (length items))
-    (add-to-list 'remote-template-list (assoc-default 'full_name (elt items i))  )))
+;; (defun search-github()
+;;   "searching github's repos which contain g8 in their name. this repos are stared"
+;;   (request
+;;    "https://api.github.com/search/repositories"
+;;    :params '(("q" . "g8" )  ("sort" . "stars")  ("order" . "desc"))
+;;    :parser 'json-read
+;;    :success (function*
+;;              (lambda (&key data &allow-other-keys)
+;;                 (fill-the-list data)
+;;                 ;;TODO: cleaning the minibuffer
+;;                 (message "please wait, Templates are being fetched from GitHub \n")
+;;                 (get-template-from-user)))))
+
+;; (defun fill-the-list(data)
+;;   "helper function for search-github which searches the http response and extracts
+;;   their full_name, after that adds them to remote-template-list"
+;;   (setq items (assoc-default 'items data))
+;;   (dotimes (i (length items))
+;;     (add-to-list 'remote-template-list (assoc-default 'full_name (elt items i))  )))
 
 
 (provide 'template)
