@@ -27,7 +27,7 @@
 
 ;;; Commentary:
 ;;
-;; This extension is for creating new project templates (e.g Scala-sbt project).
+;; This extension is for creating new project templates (e.g typesafehub/scala-sbt.g8).
 ;; Check the README file for more information.
 ;;
 ;;; Code:
