@@ -53,7 +53,7 @@
 (defun get-template-from-user()
   "This function helps user on autocomplete in minibuffer on remote-template-list,
    and after that passes the user input to g8 command of emacs shell. "
-  (setq template-name  (completing-read "Please Enter Nmae Of Your Template: e.g typesafehub/scala-sbt.g8  " remote-template-list ))
+  (setq template-name  (completing-read "Please Enter Name Of Your Template: e.g typesafehub/scala-sbt.g8  " remote-template-list ))
    (async-shell-command (concatenate 'string "g8" " " template-name))
   )
 
