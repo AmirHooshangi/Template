@@ -24,8 +24,7 @@ M-x package-install [RET] template [RET]
 ### How to use
 
 All you need is "create-project" command in Emacs which asks you to enter your g8 template name.
-for example "typesafehub/scala-sbt", if you're not sure about the first part (here typesafehub) you can search the
-scala templates like this "*/scala". and you would get list of available templates in another buffer.
+for example "typesafehub/scala-sbt".
 
 
 ### Free Software ?
